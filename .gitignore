@@ -1,0 +1,5 @@
+#no se debe incluir los entornos virtuales en el repositorio
+.mi_env/
+
+#pycache
+__pycache__/
