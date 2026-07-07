@@ -44,3 +44,14 @@ async def Crear_Transacciones(factura_id: int, datos_transacciones: Transaccione
    # "/transacciones/{id_transacciones}", response_model=Transacciones)
 
 #async def editar_transaccion(id_transacciones: int, datos_transacciones: Transacciones):
+
+@rutas_transacciones.delete("/transacciones/{transaccion_id}", response_model=Transacciones)
+async def eliminar_transaccion(transaccion_id: int, mi_sesion: Sesion_dependencia):
+    transaccion_bd = mi_sesion.get(Transacciones, transaccion_id)
+    if not transaccion_bd:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"La transacción con id {transaccion_id}, no existe")
+    mi_sesion.delete(transaccion_bd)
+    mi_sesion.commit()
+    #retornar un mensaje, debe quitar el response_model
+    return transaccion_bd

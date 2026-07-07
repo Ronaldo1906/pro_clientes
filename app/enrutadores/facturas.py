@@ -44,5 +44,14 @@ async def Crear_Factura(Cliente_id: int, datos_factura: FacturaCrear, sesion: Se
     sesion.refresh(factura_val)
     return factura_val
 
-
+@rutas_facturas.delete("/facturas/{factura_id}", response_model=Factura)
+async def eliminar_factura(factura_id: int, mi_sesion: Sesion_dependencia):
+    factura_bd = mi_sesion.get(Factura, factura_id)
+    if not factura_bd:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"La factura con id {factura_id}, no existe")
+    mi_sesion.delete(factura_bd)
+    mi_sesion.commit()
+    #retornar un mensaje, debe quitar el response_model
+    return factura_bd
 
